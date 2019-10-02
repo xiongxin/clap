@@ -3,7 +3,6 @@ extern crate clap;
 use clap::{App, Arg};
 
 fn main() {
-
     // Once all App settings (including all arguments) have been set, you call get_matches() which
     // parses the string provided by the user, and returns all the valid matches to the ones you
     // specified.
@@ -28,7 +27,8 @@ fn main() {
                         .arg(Arg::with_name("config")
                                     .help("sets the config file to use")
                                     .short("c")
-                                    .long("config"))
+                                    .long("config")
+                                    .takes_value(true))
                         .arg(Arg::with_name("input")
                                     .help("the input file to use")
                                     .index(1)
@@ -40,15 +40,18 @@ fn main() {
         println!("Debugging is turned on");
     }
 
-    // If we wanted to do some custom initialization based off some configuration file
-    // provided by the user, we could get the file (A string of the file)
-    if let Some(file) = matches.value_of("config") {
+    // If we wanted to some custom initialization based off some configuration file provided
+    // by the user, we could get the file (A string of the file)
+    if let Some(ref file) = matches.value_of("config") {
         println!("Using config file: {}", file);
     }
 
     // Because "input" is required we can safely call unwrap() because had the user NOT
     // specified a value, clap would have explained the error the user, and exited.
-    println!("Doing real work with file: {}", matches.value_of("input").unwrap() );
+    println!(
+        "Doing real work with file: {}",
+        matches.value_of("input").unwrap()
+    );
 
     // Continued program logic goes here...
 }
